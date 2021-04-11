@@ -1,15 +1,30 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {HomeScreenStack, MyBottomTabNavigator} from './Navigation/MainNavigator'
+import { Provider } from 'react-redux';
+import {store} from './reduxConfig/store'
 
-export default function App() {
+const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app! TEST TEST TEST</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+     <Provider store={store}>
+      <Navigators />
+     </Provider>
+  )
 }
+
+const Navigators = props => {
+	return (
+   
+		<NavigationContainer>
+			 <MyBottomTabNavigator />
+		</NavigationContainer>
+    
+    
+  );
+
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -19,3 +34,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default App;
