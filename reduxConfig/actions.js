@@ -8,17 +8,22 @@ export const ChangeVoiceButtonColor = () => {
         type: 'CHANGE_VOICE_BUTTON_COLOR',
     };
 };
-export const TextToTranslate = (textToTranslate) => {
+export const TextToTranslate = (textToTranslate, languageFrom, languageTo) => {
     return{
         type: 'TEXT_TO_TRANSLATE',
         data: textToTranslate,
+        languageFrom: languageFrom,
+        languageTo: languageTo
     };
 
 };
-export const TranslationToSave = (translationToSave) => {
+export const TranslationToSave = (translationToSave, languageFrom, languageTo, textToTranslate) => {
     return {
         type: 'TRANSLATION_TO_SAVE',
         data: translationToSave,
+        languageFrom: languageFrom,
+        languageTo: languageTo,
+        textToTranslate: textToTranslate
     };
 };
 export const TranslationToDelete = (key) => {

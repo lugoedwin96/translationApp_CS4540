@@ -8,7 +8,7 @@ import {TranslationToDelete} from '../reduxConfig/actions';
 const TranslationOuput = props => {
 
     
-    //const state = useSelector((state) => state);
+    const state = useSelector((state) => state);
     //const submitText = (translationToSave) => dispatch(TranslationToSave(translationToSave));
 
     //Below: instantiate the useDispatch for later dispatch calls
@@ -18,7 +18,7 @@ const TranslationOuput = props => {
     //Below: deleteCurrent will take the key saved in the array stored in translations and use it to dispatch a delete on that item
     const deleteCurrent = (key) => dispatch(TranslationToDelete(key));
 
-
+    //alert(JSON.stringify(state.translationToSaveKey.translationToSave));
     useEffect(() => {
 
 
@@ -45,7 +45,10 @@ const TranslationOuput = props => {
                                 <ListItem.Content>
                                   {/* we can use this title to show their first inputed language to translate
                                   <ListItem.Title>{data.item.translation}</ListItem.Title> */}
-                                  <Text style={styles.translationText}>{data.item.translation}</Text>
+                                  <Text style={styles.translationTextFrom}>{data.item.languageFrom}</Text>
+                                  <Text style={styles.translationTextFrom}>{data.item.textToTranslate}</Text>
+                                  <Text style={styles.translationTextTo}>{data.item.languageTo}</Text>
+                                  <Text style={styles.translationTextTo}>{data.item.translation}</Text>
                                 </ListItem.Content>
                                 <Icon name='delete' size={40} onPress={() => deleteCurrent(data.item.key)}/>
                               </ListItem>
@@ -81,11 +84,16 @@ const styles = StyleSheet.create({
       //justifyContent: 'center',
       backgroundColor: 'white'
   },
-    translationText: {
+    translationTextFrom: {
         fontSize: responsiveFontSize(3),
         color: 'black',
         
-    }
+    },
+    translationTextTo: {
+      fontSize: responsiveFontSize(4),
+      color: 'black',
+      
+  }
     
 });
 

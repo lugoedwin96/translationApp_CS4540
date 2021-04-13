@@ -1,7 +1,8 @@
+
 import React, {useState,useEffect} from 'react';
 import {SafeAreaView, View, Text, StyleSheet, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback,Keyboard} from 'react-native';
 import { Card, ListItem, Button, Icon, Input, } from 'react-native-elements';
-import {TextToTranslate} from '../reduxConfig/actions';
+import {TextToTranslate, TranslationToSave} from '../reduxConfig/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import { responsiveHeight,responsiveWidth,responsiveFontSize} from "react-native-responsive-dimensions";
 
@@ -9,7 +10,9 @@ import { responsiveHeight,responsiveWidth,responsiveFontSize} from "react-native
 const TranslationInput = props => {
 
     const [textToTranslate, setTextToTranslate]= useState('');
-    
+    //Below: a placeholder for languages we are translating to/from, once we connect google translate api we can pull the languages from that
+    const english = 'English';
+    const spanish = 'Spanish';
     //Below: state will just hold the current state of store (not pointing to anything specific in state)
     const state = useSelector((state) => state);
     //Below: instantiate the useDispatch for later dispatch calls
@@ -19,7 +22,34 @@ const TranslationInput = props => {
     //       its only on the next screen that the user can decide to press the + icon and save to an array
     //       but I was also thinking maybe we can save everything the user has asked to translate and allow them to scroll through them all later and add any to that saved array
     //       but for now its just simple and we only save on the translationOutput screen
-    const submitText = (textToTranslate) => dispatch(TextToTranslate(textToTranslate))
+    const submitText = (textToTranslate) => dispatch(TextToTranslate(textToTranslate, english, spanish))
+    //const storeSomeText = (translationToSave) => dispatch(TranslationToSave(translationToSave, languageFrom, languageTo, textToTranslate));
+
+    //below: this is the only way i figured out to store some translations in state so when the app loads there is some stuff saved in the state
+    //       this will give the impression that we have a database!
+    const mount = true
+    useEffect(() => {
+        
+    const storedTranslation1 = 'gusanos';
+    const storedLanguageFrom1 = 'English';
+    const storedLanguageTo1 = 'Spanish';
+    const storedTextToTranslate1 = 'worms';
+
+    const storedTranslation2 = 'vermi';
+    const storedLanguageFrom2 = 'English';
+    const storedLanguageTo2 = 'Italian';
+    const storedTextToTranslate2 = 'worms';
+
+    const storedTranslation3 = 'vermes';
+    const storedLanguageFrom3 = 'English';
+    const storedLanguageTo3 = 'portuguese';
+    const storedTextToTranslate3 = 'worms';
+
+    dispatch(TranslationToSave(storedTranslation1, storedLanguageFrom1, storedLanguageTo1, storedTextToTranslate1))
+    dispatch(TranslationToSave(storedTranslation2, storedLanguageFrom2, storedLanguageTo2, storedTextToTranslate2))
+    dispatch(TranslationToSave(storedTranslation3, storedLanguageFrom3, storedLanguageTo3, storedTextToTranslate3))
+
+    }, [mount]);
 
     return (
         <SafeAreaView style={styles.safeAreaView}>
@@ -91,7 +121,7 @@ const TranslationInput = props => {
                         }}
                 onPress={() => {
                     //Below: we will dispatch action with submitText to update the string in state to the currently submitted text to translate by user
-                    submitText(textToTranslate)
+                    submitText(textToTranslate, english, spanish)
                     //Below: navigates over to the TranslationOutput screen
                   props.navigation.navigate('TranslationOutput')
 

@@ -13,30 +13,45 @@ const TranslationOuput = props => {
     //Below: instantiate the useDispatch for later dispatch calls
     const dispatch = useDispatch();
     //Below: submitText will take the translationToSave (currently just the string submitted by the user) and dispatch an action to save that string to the translations array
-    const submitText = (translationToSave) => dispatch(TranslationToSave(translationToSave));
+    const submitText = (translationToSave) => dispatch(TranslationToSave(translationToSave, languageFrom, languageTo, textToTranslate));
      //Below: translations will use the useSelector to pull the state directly
     const translations = useSelector(state => state.translationToSaveKey.translationToSave);
+    //alert(JSON.stringify(state.textToTranslateKey));
+    //alert(JSON.stringify(useSelector(state => state.translationToSaveKey)))
 
+    //below: pulling all the data in state and setting them to some variables
+    const textToTranslate = state.textToTranslateKey.textToTranslate;
+    const languageFrom = state.textToTranslateKey.languageFrom;
+    const languageTo = state.textToTranslateKey.languageTo;
+    //below: is a placeholder for a translation, once the google api is connected that can be passed to the store
+    const placeHolderTranslation = 'YO QUIERO TACO BELL'
 
-
+    //Below: i leave the useEffect in case thats how we want to make a call to the google translate api so we can return the translation
     useEffect(() => {
 
-
+        
     }, []);
+
    //Below: page will currently display previously inputted text from user and an icon that onPress will send a dispatch to save that text/translation to store state
     return (
         <SafeAreaView style={styles.container}>
                 {/* Below: this is the text displaying previously submitted text */}
                 <Text style={styles.translatedText}> 
-                    {state.textToTranslateKey.textToTranslate} 
+                {languageFrom}:
                 </Text>
-                
+                <Text style={styles.translatedText}>
+                {textToTranslate}  
+                </Text>
+                <Text style={styles.translatedText}>
+                Translate to {languageTo}
+                </Text>
+
                     <Icon
                         name='add-circle'
                         size={50}
                         color='#4a69bd'
                         onPress= {() =>
-                            submitText(state.textToTranslateKey.textToTranslate)
+                            submitText(placeHolderTranslation, languageFrom, languageTo, textToTranslate)
                             } 
                     />
                {/*Below: this view just contains a flatlist that will populate what is saved in the translations array
@@ -49,7 +64,7 @@ const TranslationOuput = props => {
                         keyExtractor={(item, index) => item.key.toString()}
                         renderItem={
                             (data) =>
-                            <Text>{data.item.translation}</Text>
+                            <Text>{data.item.languageFrom}:{data.item.textToTranslate}   {data.item.languageTo}:{data.item.translation}</Text>
                         }
                     />
                 </View>

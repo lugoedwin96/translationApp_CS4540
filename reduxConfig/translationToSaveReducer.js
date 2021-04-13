@@ -6,13 +6,15 @@ export const translationToSaveReducer = (state = initialState, action) => {
     
     switch (action.type){
         case 'TRANSLATION_TO_SAVE':
-            alert(JSON.stringify(action.data));
             return { 
                 //...state, translationToSave: action.data
                  ...state, 
                  translationToSave: state.translationToSave.concat({
                     key: Math.random(),
-                    translation: action.data
+                    translation: action.data,
+                    languageFrom: action.languageFrom,
+                    languageTo: action.languageTo,
+                    textToTranslate: action.textToTranslate
                  })
                 //translationToSave: action.data
             };
