@@ -3,3 +3,27 @@ Intended to translate phrases/words of text from one language to another. The us
 
 This app is targeted for people that want to learn a different language, as it can be tedious for them to review phrases or words they learned on google translate because they would need to re-type the phrase/word several times to review.
 
+
+INSTALL THE DEPENDENCIES:
+
+navigation:
+yarn add @react-navigation/native
+expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-viewyarn add @react-navigation/stack  
+yarn add @react-navigation/bottom-tabs
+yarn add @react-navigation/drawer
+
+redux:
+yarn add redux
+yarn add react-redux
+
+react-native-elements:
+yarn add react-native-elements
+yarn add react-native-elements
+
+responsive-dimensions:
+yarn add react-native-responsive-dimensions
+
+redux-persist
+yarn add @react-native-community/async-storage
+npx pod-install
+yarn add redux-persist
