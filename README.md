@@ -25,5 +25,4 @@ yarn add react-native-responsive-dimensions
 
 redux-persist
 yarn add @react-native-community/async-storage
-npx pod-install
 yarn add redux-persist
