@@ -4,12 +4,16 @@ import { StyleSheet, Text, View } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {HomeScreenStack, MyBottomTabNavigator} from './Navigation/MainNavigator'
 import { Provider } from 'react-redux';
-import {store} from './reduxConfig/store'
+import reduxPersistStore from './reduxConfig/store'
+import {PersistGate} from 'redux-persist/integration/react';
 
 const App = () => {
+  const {store, persistor}= reduxPersistStore();
   return (
      <Provider store={store}>
+       <PersistGate loading={null} persistor={persistor}>
       <Navigators />
+      </PersistGate>
      </Provider>
   )
 }
