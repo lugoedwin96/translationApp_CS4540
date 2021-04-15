@@ -7,22 +7,33 @@ This app is targeted for people that want to learn a different language, as it c
 INSTALL THE DEPENDENCIES:
 
 navigation:
-yarn add @react-navigation/native
-expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-viewyarn add @react-navigation/stack  
-yarn add @react-navigation/bottom-tabs
-yarn add @react-navigation/drawer
+
+1. yarn add @react-navigation/native
+
+2. expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-viewyarn add @react-navigation/stack  
+
+3. yarn add @react-navigation/bottom-tabs
+
+4. yarn add @react-navigation/drawer
 
 redux:
-yarn add redux
-yarn add react-redux
+
+1. yarn add redux
+
+2. yarn add react-redux
 
 react-native-elements:
-yarn add react-native-elements
-yarn add react-native-elements
+
+1. yarn add react-native-elements
+
+2. yarn add react-native-elements
 
 responsive-dimensions:
-yarn add react-native-responsive-dimensions
 
-redux-persist
-yarn add @react-native-community/async-storage
-yarn add redux-persist
+1. yarn add react-native-responsive-dimensions
+
+redux-persist:
+
+1. yarn add @react-native-community/async-storage
+
+2. yarn add redux-persist
