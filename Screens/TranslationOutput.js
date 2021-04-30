@@ -23,12 +23,36 @@ const TranslationOuput = props => {
     const textToTranslate = state.textToTranslateKey.textToTranslate;
     const languageFrom = state.textToTranslateKey.languageFrom;
     const languageTo = state.textToTranslateKey.languageTo;
-    //below: is a placeholder for a translation, once the google api is connected that can be passed to the store
-    const placeHolderTranslation = 'YO QUIERO TACO BELL'
+  
+    //below: storing the translation that comes back from the api
+    const [translation, setTranslation] = useState('');
 
     //Below: i leave the useEffect in case thats how we want to make a call to the google translate api so we can return the translation
     useEffect(() => {
+        //below: this will get the translation from libretranslate using the above variables
+        const getTranslation = async () => {
 
+            const response = await fetch("https://libretranslate.com/translate", {
+                method: "POST",
+                body: JSON.stringify({
+                    q: textToTranslate,
+                    source: languageFrom,
+                    target: languageTo
+                }),
+                headers: { "Content-Type": "application/json" }
+            });
+
+            const result = await response.json();
+
+                if (result.error) {
+                    console.log('error occured')
+                } else {
+                    setTranslation(result.translatedText)
+                }
+       
+            };
+
+        getTranslation();
         
     }, []);
 
@@ -43,7 +67,10 @@ const TranslationOuput = props => {
                 {textToTranslate}  
                 </Text>
                 <Text style={styles.translatedText}>
-                Translate to {languageTo}
+                {languageTo}:
+                </Text>
+                <Text style={styles.translatedText}>
+                {translation}
                 </Text>
 
                     <Icon
@@ -51,7 +78,7 @@ const TranslationOuput = props => {
                         size={50}
                         color='#4a69bd'
                         onPress= {() =>
-                            submitText(placeHolderTranslation, languageFrom, languageTo, textToTranslate)
+                            submitText(translation, languageFrom, languageTo, textToTranslate)
                             } 
                     />
                {/*Below: this view just contains a flatlist that will populate what is saved in the translations array
