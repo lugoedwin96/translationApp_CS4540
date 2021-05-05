@@ -4,6 +4,15 @@ import { Card, ListItem, Button, Icon, Input, } from 'react-native-elements';
 import { useSelector, useDispatch} from 'react-redux';
 import { responsiveHeight,responsiveWidth,responsiveFontSize} from "react-native-responsive-dimensions";
 import {TranslationToSave} from '../reduxConfig/actions';
+import ClipLoader from "react-spinners/ClipLoader";
+import { css } from "@emotion/core";
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: blue;
+`;
+
 
 const TranslationOuput = props => {
 
@@ -26,34 +35,25 @@ const TranslationOuput = props => {
   
     //below: storing the translation that comes back from the api
     const [translation, setTranslation] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
+    let [color, setColor] = useState("#478A8A");
+
 
     //Below: i leave the useEffect in case thats how we want to make a call to the google translate api so we can return the translation
     useEffect(() => {
-        //below: this will get the translation from libretranslate using the above variables
-        const getTranslation = async () => {
-
-            const response = await fetch("https://libretranslate.com/translate", {
-                method: "POST",
-                body: JSON.stringify({
-                    q: textToTranslate,
-                    source: languageFrom,
-                    target: languageTo
-                }),
-                headers: { "Content-Type": "application/json" }
-            });
-
-            const result = await response.json();
-
-                if (result.error) {
-                    console.log('error occured')
-                } else {
-                    setTranslation(result.translatedText)
-                }
-       
-            };
-
-        getTranslation();
-        
+        fetch("https://libretranslate.com/translate", {
+            method: "POST",
+            body: JSON.stringify({
+                q: textToTranslate,
+                source: languageFrom,
+                target: languageTo 
+            }),
+            headers: { "Content-Type" : "application/json"}
+        })
+        .then(res => res.json())
+        .then((res) => { setTranslation(res.translatedText) })
+        .catch((error) => { console.log(error); })
+        .finally(() => setIsLoading(false));
     }, []);
 
    //Below: page will currently display previously inputted text from user and an icon that onPress will send a dispatch to save that text/translation to store state
@@ -70,7 +70,7 @@ const TranslationOuput = props => {
                 {languageTo}:
                 </Text>
                 <Text style={styles.translatedText}>
-                {translation}
+                {isLoading ? <ClipLoader color={color} loading={isLoading} css={override} size={150} /> : translation}
                 </Text>
 
                     <Icon
