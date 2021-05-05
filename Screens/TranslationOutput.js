@@ -1,18 +1,9 @@
 import React, {useState, Component, useEffect } from 'react';
-import {SafeAreaView, View, Text, StyleSheet, TextInput, FlatList, ScrollView, TouchableOpacity} from 'react-native';
+import {ActivityIndicator, SafeAreaView, View, Text, StyleSheet, TextInput, FlatList, ScrollView, TouchableOpacity} from 'react-native';
 import { Card, ListItem, Button, Icon, Input, } from 'react-native-elements';
 import { useSelector, useDispatch} from 'react-redux';
 import { responsiveHeight,responsiveWidth,responsiveFontSize} from "react-native-responsive-dimensions";
 import {TranslationToSave} from '../reduxConfig/actions';
-import ClipLoader from "react-spinners/ClipLoader";
-import { css } from "@emotion/core";
-
-const override = css`
-  display: block;
-  margin: 0 auto;
-  border-color: blue;
-`;
-
 
 const TranslationOuput = props => {
 
@@ -46,7 +37,7 @@ const TranslationOuput = props => {
             body: JSON.stringify({
                 q: textToTranslate,
                 source: languageFrom,
-                target: languageTo 
+                target: languageTo
             }),
             headers: { "Content-Type" : "application/json"}
         })
@@ -70,7 +61,7 @@ const TranslationOuput = props => {
                 {languageTo}:
                 </Text>
                 <Text style={styles.translatedText}>
-                {isLoading ? <ClipLoader color={color} loading={isLoading} css={override} size={150} /> : translation}
+                {isLoading ?  <ActivityIndicator size="small" color="#0000ff" /> : translation}
                 </Text>
 
                     <Icon
