@@ -5,7 +5,8 @@ import { Card, ListItem, Button, Icon, Input, } from 'react-native-elements';
 import {TextToTranslate, TranslationToSave} from '../reduxConfig/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import { responsiveHeight,responsiveWidth,responsiveFontSize} from "react-native-responsive-dimensions";
-
+import {Picker} from '@react-native-picker/picker';
+import { DrawerLayoutAndroidBase } from 'react-native';
 
 const TranslationInput = props => {
 
@@ -22,34 +23,93 @@ const TranslationInput = props => {
     //       its only on the next screen that the user can decide to press the + icon and save to an array
     //       but I was also thinking maybe we can save everything the user has asked to translate and allow them to scroll through them all later and add any to that saved array
     //       but for now its just simple and we only save on the translationOutput screen
-    const submitText = (textToTranslate) => dispatch(TextToTranslate(textToTranslate, english, spanish))
+    const submitText = (textToTranslate) => dispatch(TextToTranslate(textToTranslate, selectedLanguageFrom, selectedLanguageTo))
     //const storeSomeText = (translationToSave) => dispatch(TranslationToSave(translationToSave, languageFrom, languageTo, textToTranslate));
-
+    //below: pulled all the languages from the libretranslate api so we dont have to make a call to the api for the first screen
+    const [languages, setLanguages] = useState([ 
+        {
+            "code": "en",
+            "name": "English"
+        },
+        {
+            "code": "ar",
+            "name": "Arabic"
+        },
+        {
+            "code": "zh",
+            "name": "Chinese"
+        },
+        {
+            "code": "fr",
+            "name": "French"
+        },
+        {
+            "code": "de",
+            "name": "German"
+        },
+        {
+            "code": "hi",
+            "name": "Hindi"
+        },
+        {
+            "code": "ga",
+            "name": "Irish"
+        },
+        {
+            "code": "it",
+            "name": "Italian"
+        },
+        {
+            "code": "ja",
+            "name": "Japanese"
+        },
+        {
+            "code": "ko",
+            "name": "Korean"
+        },
+        {
+            "code": "pt",
+            "name": "Portuguese"
+        },
+        {
+            "code": "ru",
+            "name": "Russian"
+        },
+        {
+            "code": "es",
+            "name": "Spanish"
+        }
+    ]);
+    const [selectedLanguageFrom, setSelectedLanguageFrom] = useState('');
+    const [selectedLanguageTo, setSelectedLanguageTo] = useState('');
+    
+    
     //below: this is the only way i figured out to store some translations in state so when the app loads there is some stuff saved in the state
     //       this will give the impression that we have a database!
     const mount = true
     useEffect(() => {
         
-    const storedTranslation1 = 'gusanos';
-    const storedLanguageFrom1 = 'English';
-    const storedLanguageTo1 = 'Spanish';
-    const storedTextToTranslate1 = 'worms';
+    // const storedTranslation1 = 'gusanos';
+    // const storedLanguageFrom1 = 'English';
+    // const storedLanguageTo1 = 'Spanish';
+    // const storedTextToTranslate1 = 'worms';
 
-    const storedTranslation2 = 'vermi';
-    const storedLanguageFrom2 = 'English';
-    const storedLanguageTo2 = 'Italian';
-    const storedTextToTranslate2 = 'worms';
+    // const storedTranslation2 = 'vermi';
+    // const storedLanguageFrom2 = 'English';
+    // const storedLanguageTo2 = 'Italian';
+    // const storedTextToTranslate2 = 'worms';
 
-    const storedTranslation3 = 'vermes';
-    const storedLanguageFrom3 = 'English';
-    const storedLanguageTo3 = 'portuguese';
-    const storedTextToTranslate3 = 'worms';
+    // const storedTranslation3 = 'vermes';
+    // const storedLanguageFrom3 = 'English';
+    // const storedLanguageTo3 = 'portuguese';
+    // const storedTextToTranslate3 = 'worms';
 
-    dispatch(TranslationToSave(storedTranslation1, storedLanguageFrom1, storedLanguageTo1, storedTextToTranslate1))
-    dispatch(TranslationToSave(storedTranslation2, storedLanguageFrom2, storedLanguageTo2, storedTextToTranslate2))
-    dispatch(TranslationToSave(storedTranslation3, storedLanguageFrom3, storedLanguageTo3, storedTextToTranslate3))
-
+    // dispatch(TranslationToSave(storedTranslation1, storedLanguageFrom1, storedLanguageTo1, storedTextToTranslate1))
+    // dispatch(TranslationToSave(storedTranslation2, storedLanguageFrom2, storedLanguageTo2, storedTextToTranslate2))
+    // dispatch(TranslationToSave(storedTranslation3, storedLanguageFrom3, storedLanguageTo3, storedTextToTranslate3))
+    
     }, [mount]);
+
 
     return (
         <SafeAreaView style={styles.safeAreaView}>
@@ -59,6 +119,8 @@ const TranslationInput = props => {
                 <KeyboardAvoidingView behavior="padding" style={styles.container}>
             <View style={styles.textInputContainer}>
                 {/*Below: this is a react-native-elements input that takes the users text to translate */}
+
+                
                 <Input
                     placeholder='Text To Translate'
                     leftIcon={
@@ -121,15 +183,51 @@ const TranslationInput = props => {
                         }}
                 onPress={() => {
                     //Below: we will dispatch action with submitText to update the string in state to the currently submitted text to translate by user
-                    submitText(textToTranslate, english, spanish)
+                    submitText(textToTranslate, selectedLanguageFrom, selectedLanguageTo)
                     //Below: navigates over to the TranslationOutput screen
                   props.navigation.navigate('TranslationOutput')
+                  
 
                 }} />
             </View>
-            {/*Below: this view is a placeholder for if we are going to want to render translations to this screen, this might be where it goes */}
-            <View style={{ flex: .5}}>
-
+            {/*Below: using a scrollable called picker to let user select languages to translate from/to and mapping the languages to Picker.Item*/}
+            <View style={{ flex:.5, width: 100, flexDirection:'row', justifyContent: 'center', alignItems: 'center'}}>
+            <Text>From</Text>
+            <View style={{ flex:0, width: 100, margin: 20}}>
+                <Picker selectedValue={selectedLanguageFrom}
+                        onValueChange={(itemValue, itemIndex) =>
+                        setSelectedLanguageFrom(itemValue)
+                }>
+                    <Picker.Item label='From' value='disabled' color='#aaaa' />
+                    { languages.map((langs) => {
+                    return (<Picker.Item label={langs.name} value={langs.code} />)
+                    })
+                    }
+                </Picker>
+                
+            </View>
+            <Text>To</Text>
+            <View style={{ flex:0, width: 100, margin: 20}}>
+                
+                <Picker selectedValue={selectedLanguageTo}
+                        onValueChange={(itemValue, itemIndex) =>
+                        setSelectedLanguageTo(itemValue)
+                        
+                }>
+                    <Picker.Item label='To' value='disabled' color='#aaaa' />
+                    { languages.map((langs) => {
+                    return (<Picker.Item label={langs.name} value={langs.code} />)
+                    })
+                    }
+                    
+                    
+                </Picker>
+                
+            </View>
+                {/* { languages.map((langs) => {
+                    return (<Text>{langs.name}</Text>)
+                })
+                } */}
             </View>
             </KeyboardAvoidingView>
             </TouchableWithoutFeedback>
