@@ -4,6 +4,8 @@ import { Card, ListItem, Button, Icon, Input, } from 'react-native-elements';
 import { useSelector, useDispatch} from 'react-redux';
 import { responsiveHeight,responsiveWidth,responsiveFontSize} from "react-native-responsive-dimensions";
 import {TranslationToSave} from '../reduxConfig/actions';
+import translate from 'google-translate-open-api';
+
 
 const TranslationOuput = props => {
 
@@ -32,18 +34,11 @@ const TranslationOuput = props => {
 
     //Below: i leave the useEffect in case thats how we want to make a call to the google translate api so we can return the translation
     useEffect(() => {
-        fetch("https://libretranslate.com/translate", {
-            method: "POST",
-            body: JSON.stringify({
-                q: textToTranslate,
-                source: languageFrom,
-                target: languageTo
-            }),
-            headers: { "Content-Type" : "application/json"}
+        fetch(`https://translationapinodejs.herokuapp.com/translateTextFromTo/${textToTranslate}/${languageFrom}/${languageTo}`, {
+            headers: { "Access-Control-Allow-Origin": "*", "Accept": "application/json"}
         })
-        .then(res => res.json())
-        .then((res) => { setTranslation(res.translatedText) })
-        .catch((error) => { console.log(error); })
+        .then(res => res.text())
+        .then(text => setTranslation(text))
         .finally(() => setIsLoading(false));
     }, []);
 
